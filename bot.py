@@ -269,7 +269,7 @@ def common_message(update, context):
 
 
 def error(update, context):
-    Logs update errors
+    #Logs update errors
     logger.warning('Update "%s" caused by error "%s"', update, context.error)           
 
     
