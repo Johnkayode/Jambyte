@@ -100,7 +100,11 @@ def start_quiz(update, context):
 def end_quiz(update, context):
     chat_id = update.effective_chat.id
     message = update.message.text
-    name = update["message"]["chat"]["first_name"] + " " + update["message"]["chat"]["last_name"]
+    try:
+        name = update["message"]["chat"]["first_name"]
+    except:
+        name = update["message"]["chat"]["username"] 
+
     quizzes = client.query(q.paginate(q.match(q.index("quiz"), chat_id)))
     user = client.query(q.get(q.match(q.index("users"), chat_id)))
 
@@ -139,7 +143,11 @@ def common_message(update, context):
     message = update.message.text
     user = client.query(q.get(q.match(q.index("users"), chat_id)))
     last_command = user["data"]["last_command"]
-    name = update["message"]["chat"]["first_name"] + " " + update["message"]["chat"]["last_name"]
+    try:
+        name = update["message"]["chat"]["first_name"]
+    except:
+        name = update["message"]["chat"]["username"] 
+ 
 
 
 
