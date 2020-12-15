@@ -269,7 +269,7 @@ def common_message(update, context):
 
 
 def error(update, context):
-    #Logs update errors
+    Logs update errors
     logger.warning('Update "%s" caused by error "%s"', update, context.error)           
 
     
@@ -285,7 +285,7 @@ def main():
     dispatcher.add_error_handler(error)
 
     updater.start_webhook(listen='0.0.0.0', port=int(port), url_path=telegram_bot_token)
-    updater.bot.setwebhook('https://yourheroku.herokuapp.com/' + telegram_bot_token)
+    updater.bot.setwebhook('https://jambito-bot.herokuapp.com/' + telegram_bot_token)
     updater.idle()
 
 
