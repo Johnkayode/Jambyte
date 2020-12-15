@@ -37,8 +37,10 @@ def start(update, context):
 
     
     chat_id = update.effective_chat.id
-    username = update["message"]["chat"]["username"]
-    name = update["message"]["chat"]["first_name"] 
+    try:
+        name = update["message"]["chat"]["username"]
+    except:
+        name = update["message"]["chat"]["first_name"] 
 
     
 
@@ -49,7 +51,6 @@ def start(update, context):
         "data": {
             "id": chat_id,
             "name": name,
-            "username": username,
             "last_command": "",
             "date": datetime.now(pytz.UTC)},
            
@@ -57,7 +58,7 @@ def start(update, context):
         
     
     botler = botlers[random.randint(0,9)]
-    msg = f"Hello {name} \U0001F600,\nWelcome to Jambito, my name is {botler} and i will be your Quizbotler.\n \
+    msg = f"Hello {name} \U0001F600,\nWelcome to Jambyte, my name is {botler} and i will be your Quizbotler.\n \
         \nMaths: /start_mathematics\nEnglish: /start_english\nChemistry: /start_chemistry\nPhysics: /start_physics\
         \nCommerce: /start_commerce\nAccounting: /start_accounting\nGovernment: /start_government\nGeography: /start_geography \
         \nEnglish Lit: /start_englishlit\nBiology: /start_biology\nCRK: /start_crk\nEconomics: /start_economics\nIRK: /start_irk \
