@@ -285,7 +285,7 @@ def main():
     dispatcher.add_error_handler(error)
 
     updater.start_webhook(listen='0.0.0.0', port=int(port), url_path=telegram_bot_token)
-    updater.bot.setwebhook('https://jambito-bot.herokuapp.com/' + telegram_bot_token)
+    updater.bot.setWebhook('https://jambito-bot.herokuapp.com/' + telegram_bot_token)
     updater.idle()
 
 
