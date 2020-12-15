@@ -12,7 +12,7 @@ from faunadb.objects import Ref
 from fauna import get_client
 
 client = get_client()
-telegram_bot_token = "1497284726:AAHoKuzwJ9NYmT4GwmZ7XO9CVodwp9HJHH0"
+telegram_bot_token = os.environ.get('TOKEN')
 port = int(os.environ.get('PORT',5000))
 
 #ENABLE LOGGING
