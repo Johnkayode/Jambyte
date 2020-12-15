@@ -38,9 +38,9 @@ def start(update, context):
     
     chat_id = update.effective_chat.id
     try:
-        name = update["message"]["chat"]["username"]
+        name = update["message"]["chat"]["first_name"]
     except:
-        name = update["message"]["chat"]["first_name"] 
+        name = update["message"]["chat"]["username"] 
 
     
 
@@ -72,7 +72,10 @@ def start_quiz(update, context):
     '''
     chat_id = update.effective_chat.id
     message = update.message.text
-    name = update["message"]["chat"]["first_name"] + " " + update["message"]["chat"]["last_name"]
+    try:
+        name = update["message"]["chat"]["first_name"] 
+    except:
+        name = update["message"]["chat"]["username"] 
     subject = message.split('_')[1]
     questions = get_questions(subject=subject,mode='utme')
 
