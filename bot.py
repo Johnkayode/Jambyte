@@ -38,7 +38,7 @@ def start(update, context):
     
     chat_id = update.effective_chat.id
     username = update["message"]["chat"]["username"]
-    name = update["message"]["chat"]["first_name"] + " " + update["message"]["chat"]["last_name"]
+    name = update["message"]["chat"]["first_name"] 
 
     
 
