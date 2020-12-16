@@ -220,16 +220,35 @@ def common_message(update, context):
             title = question['question']
             section = str(question['section']).capitalize()
             if section:
-                context.bot.send_message(chat_id=chat_id,
-                    text=f"{section}\n\n{int(quiz['data']['answered']) + 1}. {title}\n\n" + \
-                        '\n'.join(f'{aid}. {text}' for aid, text in sorted(question['option'].items())),
-                    reply_markup=telegram.ReplyKeyboardMarkup([[aid for aid in sorted(question['option'])]]),
-                    parse_mode="html")
+                try:
+                    context.bot.send_message(chat_id=chat_id,
+                        text=f"{section}\n\n{int(quiz['data']['answered']) + 1}. {title}\n\n" + \
+                            '\n'.join(f'{aid}. {text}' for aid, text in sorted(question['option'].items())),
+                        reply_markup=telegram.ReplyKeyboardMarkup([[aid for aid in sorted(question['option'])]]),
+                        parse_mode="html")
+                except:
+                    title = bs(title,'lxml').txt
+                    context.bot.send_message(chat_id=chat_id,
+                        text=f"{section}\n\n{int(quiz['data']['answered']) + 1}. {title}\n\n" + \
+                            '\n'.join(f'{aid}. {text}' for aid, text in sorted(question['option'].items())),
+                        reply_markup=telegram.ReplyKeyboardMarkup([[aid for aid in sorted(question['option'])]]),
+                        )
+
             else:
-                context.bot.send_message(chat_id=chat_id,
-                    text=f"{int(quiz['data']['answered']) + 1}. {title}\n\n" + \
-                        '\n'.join(f'{aid}. {text}' for aid, text in sorted(question['option'].items())),
-                    reply_markup=telegram.ReplyKeyboardMarkup([[aid for aid in sorted(question['option'])]]))
+                
+                try:
+                    context.bot.send_message(chat_id=chat_id,
+                        text=f"{int(quiz['data']['answered']) + 1}. {title}\n\n" + \
+                            '\n'.join(f'{aid}. {text}' for aid, text in sorted(question['option'].items())),
+                        reply_markup=telegram.ReplyKeyboardMarkup([[aid for aid in sorted(question['option'])]]),
+                        parse_mode="html")
+                except:
+                    title = bs(title,'lxml').txt
+                    context.bot.send_message(chat_id=chat_id,
+                        text=f"{int(quiz['data']['answered']) + 1}. {title}\n\n" + \
+                            '\n'.join(f'{aid}. {text}' for aid, text in sorted(question['option'].items())),
+                        reply_markup=telegram.ReplyKeyboardMarkup([[aid for aid in sorted(question['option'])]]),
+                        )
             client.query(q.update(q.ref(q.collection("users"), user["ref"].id()), {"data": {"last_command": "answer_quiz","answer":question['answer']}}))
 
         else:
@@ -272,17 +291,34 @@ def common_message(update, context):
             title = question['question']
             section = str(question['section']).capitalize()
             if section:
-                context.bot.send_message(chat_id=chat_id,
-                    text=f"{section}\n\n{int(quiz['data']['answered']) + 2}. {title}\n\n" + \
-                        '\n'.join(f'{aid}. {text}' for aid, text in sorted(question['option'].items())),
-                    reply_markup=telegram.ReplyKeyboardMarkup([[aid for aid in sorted(question['option'])]]),
-                    parse_mode="html")
+                try:
+                    context.bot.send_message(chat_id=chat_id,
+                        text=f"{section}\n\n{int(quiz['data']['answered']) + 2}. {title}\n\n" + \
+                            '\n'.join(f'{aid}. {text}' for aid, text in sorted(question['option'].items())),
+                        reply_markup=telegram.ReplyKeyboardMarkup([[aid for aid in sorted(question['option'])]]),
+                        parse_mode="html")
+                except:
+                    title = bs(title,'lxml').txt
+                    context.bot.send_message(chat_id=chat_id,
+                        text=f"{section}\n\n{int(quiz['data']['answered']) + 2}. {title}\n\n" + \
+                            '\n'.join(f'{aid}. {text}' for aid, text in sorted(question['option'].items())),
+                        reply_markup=telegram.ReplyKeyboardMarkup([[aid for aid in sorted(question['option'])]]),
+                        )
             else:
-                context.bot.send_message(chat_id=chat_id,
-                    text=f"{int(quiz['data']['answered']) + 2}. {title}\n\n" + \
-                        '\n'.join(f'{aid}. {text}' for aid, text in sorted(question['option'].items())),
-                    reply_markup=telegram.ReplyKeyboardMarkup([[aid for aid in sorted(question['option'])]]),
-                    parse_mode="html")
+                try:
+                    context.bot.send_message(chat_id=chat_id,
+                        text=f"{int(quiz['data']['answered']) + 2}. {title}\n\n" + \
+                            '\n'.join(f'{aid}. {text}' for aid, text in sorted(question['option'].items())),
+                        reply_markup=telegram.ReplyKeyboardMarkup([[aid for aid in sorted(question['option'])]]),
+                        parse_mode="html")
+                except:
+                    title = bs(title,'lxml').txt
+                    context.bot.send_message(chat_id=chat_id,
+                        text=f"{int(quiz['data']['answered']) + 2}. {title}\n\n" + \
+                            '\n'.join(f'{aid}. {text}' for aid, text in sorted(question['option'].items())),
+                        reply_markup=telegram.ReplyKeyboardMarkup([[aid for aid in sorted(question['option'])]]),
+                        )
+                
 
             client.query(q.update(q.ref(q.collection("users"), user["ref"].id()), {"data": {"last_command": "answer_quiz","answer":question['answer']}}))
 
