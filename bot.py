@@ -111,12 +111,13 @@ def end_quiz(update, context):
     
     #Gets uncompleted quiz
 
-    quiz = {}
+    quiz = []
     for i in quizzes["data"]:
        quiz_ = client.query(q.get(q.ref(q.collection("quiz"), i.id())))
        if not quiz_["data"]["completed"]:
-           quiz = quiz_
-           break
+           quiz.append(quiz)
+           quiz = quiz[-1]
+           
 
     
     client.query(q.update(q.ref(q.collection("users"), user["ref"].id()), {"data": {"last_command": "end_quiz"}}))
@@ -156,26 +157,31 @@ def common_message(update, context):
     
     #Gets uncompleted quiz
 
-    quiz = {}
+    quiz = []
     for i in quizzes["data"]:
        quiz_ = client.query(q.get(q.ref(q.collection("quiz"), i.id())))
        if not quiz_["data"]["completed"]:
-           quiz = quiz_
-           break
+           quiz.append(quiz)
+           quiz = quiz[-1]
     
       
 
     
     #Gets questions' details
-    questions_left = 10 - int(quiz['data']['answered'])
-    questions = quiz['data']['questions']
+    questions_left = 0
+    questions = []
+    try:
+        questions_left = 10 - int(quiz['data']['answered'])
+        questions = quiz['data']['questions']
+    except:
+        pass
 
 
     #Hnadles the last question and ends the quiz
     if questions_left == 1:
         if message == user['data']['answer']:
             
-            score = int(quiz['data']['score']) + 1
+            score = int(quiz['data']['score']) + 1 
             
         else:
             score = int(quiz['data']['score'])
@@ -185,8 +191,15 @@ def common_message(update, context):
         
         
         client.query(q.update(q.ref(q.collection("quiz"), quiz["ref"].id()), {"data": {"completed": True}}))
+        corrections = ''
+        x = 1
+        for question in questions:
+            ans = f"{x}. {question['answer']}\n"
+            corrections += ans
+            x += 1
+        msg = f"Quiz completed\nScore: {int(quiz['data']['score'])}/10 \nAnswers:\n{corrections}"
         context.bot.send_message(chat_id=chat_id,
-                text=f"Quiz completed\nScore: {int(quiz['data']['score'])}/10 ",
+                text=msg,
                 reply_markup=telegram.ReplyKeyboardRemove())
         botler = botlers[random.randint(0,9)]
         msg = f"Hello {name} \U0001F600,\nWelcome to Jambito, my name is {botler} and i will be your Quizbotler.\n \
@@ -217,9 +230,15 @@ def common_message(update, context):
             client.query(q.update(q.ref(q.collection("users"), user["ref"].id()), {"data": {"last_command": "answer_quiz","answer":question['answer']}}))
 
         else:
-            
+            corrections = ''
+            x = 1
+            for question in questions:
+                ans = f"{x}. {question['answer']}\n"
+                corrections += ans
+                x += 1
+            msg = f"Quiz completed\nScore: {int(quiz['data']['score'])}/10 \nAnswers:\n{corrections}"
             context.bot.send_message(chat_id=chat_id,
-                text=f"Quiz completed\nScore: {int(quiz['data']['score'])}/10",
+                text=msg,
                 reply_markup=telegram.ReplyKeyboardRemove())
             client.query(q.update(q.ref(q.collection("quiz"), quiz["ref"].id()), {"data": {"completed": True}}))
             botler = botlers[random.randint(0,9)]
@@ -263,9 +282,15 @@ def common_message(update, context):
             client.query(q.update(q.ref(q.collection("users"), user["ref"].id()), {"data": {"last_command": "answer_quiz","answer":question['answer']}}))
 
         else:
-            
+            corrections = ''
+            x = 1
+            for question in questions:
+                ans = f"{x}. {question['answer']}\n"
+                corrections += ans
+                x += 1
+            msg = f"Quiz completed\nScore: {int(quiz['data']['score'])}/10 \nAnswerss:\n{corrections}"
             context.bot.send_message(chat_id=chat_id,
-                text=f"Quiz completed\nScore: {int(quiz['data']['score'])}/10",
+                text=msg,
                 reply_markup=telegram.ReplyKeyboardRemove())
             botler = botlers[random.randint(0,9)]
             msg = f"Hello {name} \U0001F600,\nWelcome to Jambito, my name is {botler} and i will be your Quizbotler.\n \
