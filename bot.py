@@ -111,12 +111,13 @@ def end_quiz(update, context):
     
     #Gets uncompleted quiz
 
-    quiz = []
+    quizzz = []
     for i in quizzes["data"]:
        quiz_ = client.query(q.get(q.ref(q.collection("quiz"), i.id())))
        if not quiz_["data"]["completed"]:
-           quiz.append(quiz)
-           quiz = quiz[-1]
+           quizzz.append(quiz_)
+           
+    quiz = quizzz[-1]
            
 
     
@@ -157,12 +158,13 @@ def common_message(update, context):
     
     #Gets uncompleted quiz
 
-    quiz = []
+    quizzz = []
     for i in quizzes["data"]:
        quiz_ = client.query(q.get(q.ref(q.collection("quiz"), i.id())))
        if not quiz_["data"]["completed"]:
-           quiz.append(quiz)
-           quiz = quiz[-1]
+           quizzz.append(quiz_)
+
+    quiz = quizzz[-1]
     
       
 
