@@ -199,7 +199,7 @@ def common_message(update, context):
             ans = f"{x}. {question['answer']}\n"
             corrections += ans
             x += 1
-        msg = f"Quiz completed\nScore: {int(quiz['data']['score'])}/10 \nAnswers:\n{corrections}"
+        msg = f"Quiz completed\nScore: {score}/10 \nAnswers:\n{corrections}"
         context.bot.send_message(chat_id=chat_id,
                 text=msg,
                 reply_markup=telegram.ReplyKeyboardRemove())
@@ -217,13 +217,14 @@ def common_message(update, context):
         if questions_left > 1:
             answered = int(quiz['data']['answered'])
             question = questions[answered]
-            title = bs(question['question'],'lxml').text
+            title = question['question']
             section = str(question['section']).capitalize()
             if section:
                 context.bot.send_message(chat_id=chat_id,
                     text=f"{section}\n\n{int(quiz['data']['answered']) + 1}. {title}\n\n" + \
                         '\n'.join(f'{aid}. {text}' for aid, text in sorted(question['option'].items())),
-                    reply_markup=telegram.ReplyKeyboardMarkup([[aid for aid in sorted(question['option'])]]))
+                    reply_markup=telegram.ReplyKeyboardMarkup([[aid for aid in sorted(question['option'])]]),
+                    parse_mode="html")
             else:
                 context.bot.send_message(chat_id=chat_id,
                     text=f"{int(quiz['data']['answered']) + 1}. {title}\n\n" + \
@@ -268,18 +269,20 @@ def common_message(update, context):
             
             answered = int(quiz['data']['answered'])
             question = questions[answered + 1]
-            title = bs(question['question'],'lxml').text
+            title = question['question']
             section = str(question['section']).capitalize()
             if section:
                 context.bot.send_message(chat_id=chat_id,
                     text=f"{section}\n\n{int(quiz['data']['answered']) + 2}. {title}\n\n" + \
                         '\n'.join(f'{aid}. {text}' for aid, text in sorted(question['option'].items())),
-                    reply_markup=telegram.ReplyKeyboardMarkup([[aid for aid in sorted(question['option'])]]))
+                    reply_markup=telegram.ReplyKeyboardMarkup([[aid for aid in sorted(question['option'])]]),
+                    parse_mode="html")
             else:
                 context.bot.send_message(chat_id=chat_id,
                     text=f"{int(quiz['data']['answered']) + 2}. {title}\n\n" + \
                         '\n'.join(f'{aid}. {text}' for aid, text in sorted(question['option'].items())),
-                    reply_markup=telegram.ReplyKeyboardMarkup([[aid for aid in sorted(question['option'])]]))
+                    reply_markup=telegram.ReplyKeyboardMarkup([[aid for aid in sorted(question['option'])]]),
+                    parse_mode="html")
 
             client.query(q.update(q.ref(q.collection("users"), user["ref"].id()), {"data": {"last_command": "answer_quiz","answer":question['answer']}}))
 
@@ -290,7 +293,7 @@ def common_message(update, context):
                 ans = f"{x}. {question['answer']}\n"
                 corrections += ans
                 x += 1
-            msg = f"Quiz completed\nScore: {int(quiz['data']['score'])}/10 \nAnswerss:\n{corrections}"
+            msg = f"Quiz completed\nScore: {score}/10 \nAnswerss:\n{corrections}"
             context.bot.send_message(chat_id=chat_id,
                 text=msg,
                 reply_markup=telegram.ReplyKeyboardRemove())
