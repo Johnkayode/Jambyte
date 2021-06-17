@@ -1,6 +1,6 @@
 import os
 import telegram
-import random
+import random 
 import pytz
 import logging
 from datetime import datetime
@@ -11,7 +11,12 @@ from faunadb import query as q
 from faunadb.objects import Ref
 from fauna import get_client
 
+from utils import MyMessage, Botler
+
 client = get_client()
+messenger = MyMessage()
+
+
 telegram_bot_token = os.environ.get('TOKEN')
 port = int(os.environ.get('PORT',5000))
 
@@ -56,13 +61,9 @@ def start(update, context):
            
         }))
         
-    
-    botler = botlers[random.randint(0,9)]
-    msg = f"Hello {name} \U0001F600,\nWelcome to Jambyte, my name is {botler} and i will be your Quizbotler.\n \
-        \nMaths: /start_mathematics\nEnglish: /start_english\nChemistry: /start_chemistry\nPhysics: /start_physics\
-        \nCommerce: /start_commerce\nAccounting: /start_accounting\nGovernment: /start_government\nGeography: /start_geography \
-        \nEnglish Lit: /start_englishlit\nBiology: /start_biology\nCRK: /start_crk\nEconomics: /start_economics\nIRK: /start_irk \
-        \nInsurance: /start_insurance"
+    botler = Botler().get()
+    msg = messenger.get(name, botler)
+        
     context.bot.send_message(chat_id=chat_id, text=msg)
 
 def start_quiz(update, context):
@@ -127,13 +128,11 @@ def end_quiz(update, context):
     client.query(q.update(q.ref(q.collection("quiz"), quiz["ref"].id()), {"data": {"completed": True}}))
     context.bot.send_message(chat_id=chat_id,
             text=f"Quiz completed\nScore: {int(quiz['data']['score'])}/10 ",
-            reply_markup=telegram.ReplyKeyboardRemove())
-    botler = botlers[random.randint(0,9)]
-    msg = f"Hello {name} \U0001F600,\nWelcome to Jambito, my name is {botler} and i will be your Quizbotler.\n \
-    \nMaths: /start_mathematics\nEnglish: /start_english\nChemistry: /start_chemistry\nPhysics: /start_physics\
-    \nCommerce: /start_commerce\nAccounting: /start_accounting\nGovernment: /start_government\nGeography: /start_geography \
-    \nEnglish Lit: /start_englishlit\nBiology: /start_biology\nCRK: /start_crk\nEconomics: /start_economics\nIRK: /start_irk \
-    \nInsurance: /start_insurance"
+            reply_markup=telegram.ReplyKeyboardRemove()
+        )
+
+    botler = Botler().get()
+    msg = messenger.get(name, botler)
     context.bot.send_message(chat_id=chat_id, text=msg)
         
 def common_message(update, context):
@@ -203,12 +202,8 @@ def common_message(update, context):
         context.bot.send_message(chat_id=chat_id,
                 text=msg,
                 reply_markup=telegram.ReplyKeyboardRemove())
-        botler = botlers[random.randint(0,9)]
-        msg = f"Hello {name} \U0001F600,\nWelcome to Jambito, my name is {botler} and i will be your Quizbotler.\n \
-        \nMaths: /start_mathematics\nEnglish: /start_english\nChemistry: /start_chemistry\nPhysics: /start_physics\
-        \nCommerce: /start_commerce\nAccounting: /start_accounting\nGovernment: /start_government\nGeography: /start_geography \
-        \nEnglish Lit: /start_englishlit\nBiology: /start_biology\nCRK: /start_crk\nEconomics: /start_economics\nIRK: /start_irk \
-        \nInsurance: /start_insurance"
+        botler = Botler().get()
+        msg = message.get(name, botler)
         context.bot.send_message(chat_id=chat_id, text=msg)
         
     #Handles starting the quiz
@@ -263,12 +258,8 @@ def common_message(update, context):
                 text=msg,
                 reply_markup=telegram.ReplyKeyboardRemove())
             client.query(q.update(q.ref(q.collection("quiz"), quiz["ref"].id()), {"data": {"completed": True}}))
-            botler = botlers[random.randint(0,9)]
-            msg = f"Hello {name} \U0001F600,\nWelcome to Jambito, my name is {botler} and i will be your Quizbotler.\n \
-            \nMaths: /start_mathematics\nEnglish: /start_english\nChemistry: /start_chemistry\nPhysics: /start_physics\
-            \nCommerce: /start_commerce\nAccounting: /start_accounting\nGovernment: /start_government\nGeography: /start_geography \
-            \nEnglish Lit: /start_englishlit\nBiology: /start_biology\nCRK: /start_crk\nEconomics: /start_economics\nIRK: /start_irk \
-            \nInsurance: /start_insurance"
+            botler = Botler().get()
+            msg = messenger.get(name, botler)
             context.bot.send_message(chat_id=chat_id, text=msg)
 
     #Receives answers and send next questions
@@ -340,6 +331,7 @@ def common_message(update, context):
             \nEnglish Lit: /start_englishlit\nBiology: /start_biology\nCRK: /start_crk\nEconomics: /start_economics\nIRK: /start_irk \
             \nInsurance: /start_insurance"
             context.bot.send_message(chat_id=chat_id, text=msg)
+    
     else:
         context.bot.send_message(chat_id=chat_id,
                 text="Unknown Command",
