@@ -22,6 +22,6 @@ class MyMessage():
         message = f"Hello {name} \U0001F600,\nWelcome to Jambyte, my name is {botler} and i will be your Quizbotler.\n\n"
         for subject in self.subjects:
             sub = subject.replace(' ','').lower()
-            message += f'{subject}: start_{sub} \n'
+            message += f'{subject}: /start_{sub} \n'
 
         return message
